@@ -7,8 +7,8 @@ from pyspark import SparkContext
 
 from dataset import PtData
 from loss_grad import LossGradFunEval, LossAndGradients
-from optim import SteepestGradientDescentOptimizer
-from regularizer import L2Regularizer
+from optim import SteepestGradientDescentOptimizer, BFGSOptimizer, ProximalOptimizer
+from regularizer import L1Regularizer, L2Regularizer
 
 
 class BinaryLogisticRegressionLossGradFunEval(LossGradFunEval):
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     sc = SparkContext()
 
-    np.random.seed(122)
+    np.random.seed(0)
 
     x_dim = 4
     N = 300
@@ -59,10 +59,35 @@ if __name__ == '__main__':
     lmd = 0.01  # for ridge
 
     f_eval = BinaryLogisticRegressionLossGradFunEval()
-    regl = L2Regularizer()
-    optimizer = SteepestGradientDescentOptimizer(lr=1.0)
+    l1_regl = L1Regularizer()
+    l2_regl = L2Regularizer()
 
-    optimizer.optimize(init_weights, dataset, f_eval, regl, lmd)
+    sgdOptimizer = SteepestGradientDescentOptimizer(lr=1.0)
+    bfgsOptimizer = BFGSOptimizer(lr=1.0)
+    proximalOptimizer_l1 = ProximalOptimizer(lr=1.0)
+    proximalOptimizer_l2 = ProximalOptimizer(lr=1.0)
+
+    sgdOptimizer.optimize(init_weights, dataset, f_eval, l2_regl, lmd)
+    proximalOptimizer_l2.optimize(init_weights, dataset, f_eval, l2_regl, lmd)
+    bfgsOptimizer.optimize(init_weights, dataset, f_eval, l2_regl, lmd)
+
+    proximalOptimizer_l1.optimize(init_weights, dataset, f_eval, l1_regl, lmd)
+
+    optimized_weights1 = sgdOptimizer.optimized_weights
+    optimized_weights2 = proximalOptimizer_l2.optimized_weights
+    optimized_weights3 = bfgsOptimizer.optimized_weights
+
+    print("=================================================")
+    print("Logisic Regression with L2 regularization")
+    print("Gradient Descent     : ", optimized_weights1)
+    print("Proximal Optimization: ", optimized_weights1)
+    print("BFGS (quasi-Newton)  : ", optimized_weights3)
+
+    optimized_weights4 = proximalOptimizer_l1.optimized_weights
+
+    print("=================================================")
+    print("Logisic Regression with L1 regularization")
+    print("Proximal Optimization: ", optimized_weights4)
 
 
 
