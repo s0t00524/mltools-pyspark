@@ -75,9 +75,12 @@ class SteepestGradientDescentOptimizer(Optimizer):
             loss = loss_grad.loss
             grad = loss_grad.grad
 
+            loss_with_regl = loss + lmd * regl.get_score(w)
+            grad_with_regl = grad + lmd * regl.get_grad(w)
+            grad_norm_with_regl = np.linalg.norm(grad_with_regl)
+
             # termination condition
-            grad_norm = np.linalg.norm(grad)
-            if grad_norm < self.tol:
+            if grad_norm_with_regl < self.tol:
                 break
 
             direction = -grad
@@ -101,29 +104,17 @@ class SteepestGradientDescentOptimizer(Optimizer):
             # proximal operation
             w_next = regl.prox(w_next, eta * lmd)
 
-            # _loss_next = f_eval.get_loss_grad(w_next, dataset).loss
-            # _upper_bound = loss + np.dot(grad, w_next - w) + np.linalg.norm(w_next - w, 2) ** 2 / (2 * eta)
-            #
-            # # Search new lr until satisfy Armijo's condition
-            # while _loss_next > _upper_bound:
-            #     print(eta)
-            #     eta = self.rho * eta
-            #     _upper_bound = loss + np.dot(grad, w_next - w) + np.linalg.norm(w_next - w, 2) ** 2 / (2 * eta)
-
-            # _loss_next = f_eval.get_loss_grad(w_next, dataset).loss
-            # while _loss_next > loss + self.c1 * eta * np.dot(grad, direction):
-            #     print(eta)
-            #     eta = self.rho * eta
-
             w = w_next
             path.append(w)
 
             # print the current status
-            print("[iter: %04d] [loss: %.6f] [norm of gradient: %.6f] loss_next: %.6f, upper_bound: %.6f, eta: %.6f"
-                  % (i, loss, grad_norm, _loss_next, _upper_bound, eta))
+            # print("[iter: %04d] [loss: %.6f] [norm of gradient: %.6f] loss_next: %.6f, upper_bound: %.6f, eta: %.6f"
+            #       % (i, loss, grad_norm, _loss_next, _upper_bound, eta))
 
-            # print("[iter: %04d] [loss: %.6f] [norm of gradient: %.6f] ,eta: %.6f"
-            #       % (i, loss, grad_norm, eta))
+            print("[iter: %04d] [loss: %.6f] [norm of gradient: %.6f] loss_next: %.6f, upper_bound: %.6f, eta: %.6f"
+                  % (i, loss_with_regl, grad_norm_with_regl, _loss_next, _upper_bound, eta))
+
+
 
         # process for termination
         final_loss = f_eval.get_loss_grad(w, dataset).loss
