@@ -6,8 +6,8 @@ from abc import abstractmethod, ABCMeta
 import numpy as np
 
 from tools.loss_grad import LossGradFunEval
-from tools.regularizer import Regularizer
 from tools.projector import Projector
+from tools.regularizer import Regularizer
 
 
 class Optimizer(metaclass=ABCMeta):

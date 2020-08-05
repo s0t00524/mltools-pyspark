@@ -1,19 +1,17 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import math
-
 import cvxpy as cp
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from pyspark import SparkContext
-
 from tqdm import tqdm
 
 from tools.dataset import PtData
 from tools.loss_grad import LossGradFunEval, LossAndGradients
-from tools.optim import SteepestGradientDescentOptimizer, BFGSOptimizer, ProximalOptimizer
-from tools.regularizer import L1Regularizer, L2Regularizer
+from tools.optim import ProximalOptimizer
+from tools.regularizer import L1Regularizer
+
 
 class LassoPOExampleLossGradFunEval(LossGradFunEval):
 

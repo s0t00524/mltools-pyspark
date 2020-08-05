@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
-import math
 
 import numpy as np
 
 from tools.dataset import PtData
 from tools.loss_grad import LossGradFunEval, LossAndGradients
+
 
 class HingeLossGradFunEval(LossGradFunEval):
 

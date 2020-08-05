@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
-import math
 from abc import abstractmethod, ABCMeta
 
 import numpy as np
+
 
 class Projector(metaclass=ABCMeta):
 

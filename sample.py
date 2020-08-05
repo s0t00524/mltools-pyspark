@@ -1,5 +1,5 @@
 import cvxpy as cp
-import numpy as np
+
 x = cp.Variable(4)
 
 objective = cp.Minimize(4 * x[1] + 3 * x[2] + x[3])

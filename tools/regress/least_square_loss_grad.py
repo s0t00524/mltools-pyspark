@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
-import math
-from typing import Union
 
 import numpy as np
 
 from tools.dataset import PtData
 from tools.loss_grad import LossGradFunEval, LossAndGradients
+
 
 class LeastSquareLossGradFunEval(LossGradFunEval):
 

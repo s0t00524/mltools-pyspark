@@ -1,24 +1,22 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import math
-
 import cvxpy as cv
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from pyspark import SparkContext
 
-from tqdm import tqdm
-
 from tools.dataset import PtData
-from tools.optim import ProximalOptimizer, AcceleratedProximalOptimizer
-from tools.regularizer import GroupL1Regularizer
+from tools.optim import AcceleratedProximalOptimizer
 from tools.regress.least_square_loss_grad import LeastSquareLossGradFunEval
+from tools.regularizer import GroupL1Regularizer
+
 
 def mldivide(A, b):
   piA = np.linalg.pinv(A)
   x = np.dot(piA, b)
   return x
+
 
 if __name__ == '__main__':
 
@@ -75,7 +73,7 @@ if __name__ == '__main__':
     f_eval = LeastSquareLossGradFunEval()
     regul = GroupL1Regularizer(g)
 
-    # optimizer = ProximalOptimizer(lr=0.1, lr_decay=False)
+    # optimizer = ProximalOptimizer(lr=0.25, lr_decay=False)
     optimizer = AcceleratedProximalOptimizer(lr=0.25, lr_decay=False)
 
     # optimize by the proximal operator

@@ -3,13 +3,9 @@
 import math
 
 import numpy as np
-import matplotlib.pyplot as plt
-from pyspark import SparkContext
 
 from tools.dataset import PtData
 from tools.loss_grad import LossGradFunEval, LossAndGradients
-from tools.optim import SteepestGradientDescentOptimizer, BFGSOptimizer, ProximalOptimizer
-from tools.regularizer import L1Regularizer, L2Regularizer
 
 
 class BinaryLogisticRegressionLossGradFunEval(LossGradFunEval):

@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 from abc import abstractmethod, ABCMeta
-from typing import Union
-
-from pyspark import RDD
 
 from tools.dataset import PtData
 

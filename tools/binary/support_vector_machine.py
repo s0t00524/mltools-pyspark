@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
-import math
-from typing import Union
 
 import numpy as np
-from pyspark import RDD
 
+from tools.binary.hinge_loss_grad import HingeLossGradFunEval
 from tools.dataset import PtData
 from tools.loss_grad import LossGradFunEval, LossAndGradients
 from tools.optim import ProjectionOptimizer
 from tools.projector import ParamIn0to1Projector
-from tools.binary.hinge_loss_grad import HingeLossGradFunEval
 from tools.regularizer import L2Regularizer
 
 

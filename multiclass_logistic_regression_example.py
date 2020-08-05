@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
-import math
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from pyspark import SparkContext
 
 from tools.dataset import PtData
-from tools.loss_grad import LossGradFunEval, LossAndGradients
+from tools.multiclass.multiclass_logistic_loss_grad import MultiClassLogisticRegressionLossGradFunEval
 from tools.optim import SteepestGradientDescentOptimizer, BFGSOptimizer, ProximalOptimizer
 from tools.regularizer import L1Regularizer, L2Regularizer
-from tools.multiclass.multiclass_logistic_loss_grad import MultiClassLogisticRegressionLossGradFunEval
-
 
 if __name__ == '__main__':
 
