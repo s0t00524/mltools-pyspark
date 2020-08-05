@@ -5,7 +5,7 @@ from typing import Union
 
 from pyspark import RDD
 
-from dataset import PtData
+from tools.dataset import PtData
 
 
 class LossAndGradients(object):
@@ -33,7 +33,8 @@ class LossGradFunEval(metaclass=ABCMeta):
     def _ptwise_loss_and_grad(self, param, data: PtData) -> LossAndGradients:
         pass
 
-    def get_loss_grad(self, param, dataset: Union[RDD, PtData]) -> LossAndGradients:
+    def get_loss_grad(self, param, dataset#: Union[RDD, PtData]
+                      ) -> LossAndGradients:
 
         # n_dataset = len(dataset)
         n_dataset = dataset.count()
@@ -47,5 +48,27 @@ class LossGradFunEval(metaclass=ABCMeta):
             lambda lg1, lg2: LossAndGradients(lg1.loss + lg2.loss, lg1.grad + lg2.grad)
         )  # TODO
 
+        # print(lg_total.loss)
+
         lg = LossAndGradients(loss=lg_total.loss / n_dataset , grad=lg_total.grad / n_dataset)
+        return lg
+
+    def get_sum_of_loss_grad(self, param, dataset#: Union[RDD, PtData]
+                      ) -> LossAndGradients:
+
+        # n_dataset = len(dataset)
+        n_dataset = dataset.count()
+
+        def loss_grad_f(data: PtData):
+            return self._ptwise_loss_and_grad(param, data)
+
+        loss_grad_per_pt = dataset.map(loss_grad_f)
+
+        lg_total = loss_grad_per_pt.reduce(
+            lambda lg1, lg2: LossAndGradients(lg1.loss + lg2.loss, lg1.grad + lg2.grad)
+        )  # TODO
+
+        # print(lg_total.loss)
+
+        lg = LossAndGradients(loss=lg_total.loss, grad=lg_total.grad)
         return lg

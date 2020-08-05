@@ -1,3 +1,5 @@
 # python temporary file
 /__pycache__/
 .idea
+
+/out/

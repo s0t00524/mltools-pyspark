@@ -1,11 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 from collections import namedtuple
-from typing import TypeVar
-
-
-T = TypeVar('T')
-V = TypeVar('V')
 
 PtData = namedtuple("PtData", ("input", "target"))
 
