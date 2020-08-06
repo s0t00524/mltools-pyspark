@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # get training log of loss
     print("start plotting")
     sgd_log = np.abs(sgdOptimizer.train_log - sgdOptimizer.optimized_result)
-    bfgs_log = np.abs(bfgsOptimizer.train_log - sgdOptimizer.optimized_result)
+    bfgs_log = np.abs(bfgsOptimizer.train_log - bfgsOptimizer.optimized_result)
 
     figsize = (10, 10)
     save_base = "./out/compare-sgd-with-bfgs-multiclass-logloss"
