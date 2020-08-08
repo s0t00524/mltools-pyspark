@@ -64,6 +64,7 @@ if __name__ == '__main__':
 
     optimized = []
     optimized_paths = []
+    weight_logs = []
 
     f_eval = LassoPOExampleLossGradFunEval()
     l1_regl = L1Regularizer()
@@ -82,6 +83,8 @@ if __name__ == '__main__':
 
         optimized.append(optimized_weights)
         optimized_paths.append(proximalOperator.path)
+        norm_diff = [np.linalg.norm(w_t - optimized_weights) for w_t in proximalOperator.path]
+        weight_logs.append(norm_diff)
 
         # optimize by cvxpy
         w_cvx = cp.Variable(2)
@@ -148,6 +151,54 @@ if __name__ == '__main__':
     plt.savefig(save_base + ".pdf")
     plt.close()
 
+    # visualize norm of w - w
+    figsize = (10, 10)
+    save_base = "./out/transiton-of-norm"
+
+    plt.figure(figsize=figsize)
+    plt.plot(weight_logs[0], marker="*", label="$\lambda = 2$")
+    plt.plot(weight_logs[1], marker="*", label="$\lambda = 4$")
+    plt.plot(weight_logs[2], marker="*", label="$\lambda = 6$")
+    plt.yscale('log')
+
+    plt.xlabel("# of iteration")
+    plt.ylabel("$||w^{(t)} - \hat{w})||$")
+    plt.title("$||w^{(t)} - \hat{w})||$ w.r.t. # of iterations")
+    plt.legend(loc="upper right")
+    plt.savefig(save_base + ".png")
+    plt.savefig(save_base + ".eps")
+    plt.savefig(save_base + ".pdf")
+    plt.close()
+
+    # visualize norm of w_1
+    figsize = (5, 5)
+    save_base = "./out/w-and-lambda-on-lasso"
+
+    fig = plt.figure(figsize=figsize)
+    ax1 = fig.add_subplot(1, 2, 1)
+
+    ax1.plot([2, 4, 6], [optimized[0][0], optimized[1][0], optimized[2][0]], "b-*", label="$w_1$")
+
+    ax1.set_xlabel("$\lambda$")
+    ax1.set_ylabel("$w_1$")
+    ax1.set_title("$w_1$ w.r.t. $\lambda$")
+    ax1.legend(loc="upper right")
+    ax1.grid()
+
+    ax2 = fig.add_subplot(1, 2, 2)
+
+    ax2.plot([2, 4, 6], [optimized[0][1], optimized[1][1], optimized[2][1]], "g-*", label="$w_2$")
+
+    ax2.set_xlabel("$\lambda$")
+    ax2.set_ylabel("$w_2$")
+    ax2.set_title("$w_2$ w.r.t. $\lambda$")
+    ax2.legend(loc="upper right")
+    ax2.grid()
+
+    fig.savefig(save_base + ".png")
+    fig.savefig(save_base + ".eps")
+    fig.savefig(save_base + ".pdf")
+    fig.close()
 
 
 
